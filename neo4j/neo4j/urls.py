@@ -24,6 +24,7 @@ import catalog.views as views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('tasks/', include('tasks.urls')),
     path('catalog/', include('catalog.urls')),
     path('', RedirectView.as_view(url='/catalog/')),
     path('accounts/', include('django.contrib.auth.urls'))
