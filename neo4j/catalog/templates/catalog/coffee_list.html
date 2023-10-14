@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Coffee List</h1>
+    {% if coffee_list %}
+    <ul>
+        {% for coffee in coffee_list %}
+        <li>
+            <a href = "{{coffee.get_absolute_url}}">{{coffee.coffee_name}}</a>
+            ({{coffee.coffee_country}})
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p> There are no coffees in the library. </p>
+    {% endif %}
+{% endblock %}
