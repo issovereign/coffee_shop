@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path('', views.sign_in, name="index"),
+    path('', RedirectView.as_view(url='/Shopping/login'), name="index"),
     path('register', views.sign_up, name='Register'),
     path('login', views.sign_in, name='Login'),
     path('logout', views.log_out, name='Logout'),

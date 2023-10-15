@@ -35,7 +35,7 @@ def sign_up(request):
                              member_number=member_number,)
             _member.save()
             form.save()
-            return redirect('/login')
+            return redirect('/Shopping/login')
         
     context = {
         'form' : form
