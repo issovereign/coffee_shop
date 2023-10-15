@@ -4,12 +4,12 @@ from django.contrib.auth.models import User
 
 class RegisterForm(UserCreationForm):
 
-    username = forms.CharField(
+    accountname = forms.CharField(
         label="姓名",
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
-    accountname = forms.CharField(
+    username = forms.CharField(
         label="帳號",
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
@@ -40,7 +40,7 @@ class RegisterForm(UserCreationForm):
     )
     class Meta:
         model = User
-        fields = ('username', 'accountname', 'email', 'address', 'number', 'password1', 'password2')
+        fields = ('accountname', 'username', 'email', 'address', 'number', 'password1', 'password2')
 
 
 class LoginForm(forms.Form):
