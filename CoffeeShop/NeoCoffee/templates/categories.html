@@ -5,8 +5,15 @@
     <!-- The top-level categories will be rendered here -->
 </div>
 
+<button id="goBack">返回上一層</button>
+
 <script>
+let navigationStack = [];
+
 function loadSubCategories(parentId, element, apiUrlOverride) {
+    // Push the current parentId to the stack at the start
+    navigationStack.push(parentId);
+
     // Determine the correct API endpoint based on parentId or use the provided override
     let apiUrl = apiUrlOverride || (parentId ? `/api/subcategories/${parentId}/` : `/api/topcategories/`);
     
@@ -14,27 +21,48 @@ function loadSubCategories(parentId, element, apiUrlOverride) {
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            // Render the categories
-            let categoriesDiv = document.createElement("div");
-            data.forEach(category => {
-                let categoryDiv = document.createElement("div");
-                let categoryLink = document.createElement("a");
-                categoryLink.href = "#";
-                categoryLink.innerText = category.name;
-                categoryLink.onclick = (e) => {
-                    e.preventDefault();
-                    categoriesDiv.innerHTML = ""; // Clear previous subcategories
-                    loadSubCategories(category.id, categoriesDiv);
-                };
-                categoryDiv.appendChild(categoryLink);
-                categoriesDiv.appendChild(categoryDiv);
-            });
-            element.appendChild(categoriesDiv);
+            // Clear existing categories
+            element.innerHTML = "";
+            
+            if (data.length === 0) {
+                // This is the bottom category
+                showPurchaseModal(parentId);
+            } else {
+                // Render the categories
+                data.forEach(category => {
+                    let categoryDiv = document.createElement("div");
+                    let categoryLink = document.createElement("a");
+                    categoryLink.href = "#";
+                    categoryLink.innerText = category.name;
+                    categoryLink.onclick = (e) => {
+                        e.preventDefault();
+                        loadSubCategories(category.id, element);
+                    };
+                    categoryDiv.appendChild(categoryLink);
+                    element.appendChild(categoryDiv);
+                });
+            }
         });
+}
+
+document.getElementById("goBack").addEventListener("click", function() {
+    if (navigationStack.length > 1) {
+        navigationStack.pop(); // Remove the current parentId
+        let lastVisited = navigationStack.pop(); // Get the previous parentId
+        loadSubCategories(lastVisited, document.getElementById("categories"));
+    } else if (navigationStack.length === 1) {
+        navigationStack.pop(); // Clear the only item in the stack
+        loadSubCategories(null, document.getElementById("categories"));
+    }
+});
+
+function showPurchaseModal(categoryId) {
+    // Show purchase modal and on confirmation send data to the backend
 }
 
 // Load the top-level categories on page load
 loadSubCategories(null, document.getElementById("categories"));
 
 </script>
+
 {% endblock %}
