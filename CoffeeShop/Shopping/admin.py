@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import member, order
+from .models import Member, Order
 
 # Register your models here.
-class memberinfo(admin.ModelAdmin):
+class Memberinfo(admin.ModelAdmin):
     list_display = ('member_name', 'member_number', 'member_address', 'member_email')
 
-class ordersinfo(admin.ModelAdmin):
-    list_display = ('primary_key', 'member_name', 'coffee_name')
+class Ordersinfo(admin.ModelAdmin):
+    list_display = ('member', 'coffee_name')
 
-admin.site.register(member, memberinfo)
-admin.site.register(order, ordersinfo)
+admin.site.register(Member, Memberinfo)
+admin.site.register(Order, Ordersinfo)

@@ -1,10 +1,14 @@
 from django.shortcuts import render
-from .models import member
+from .models import Member, Order
 from django.views import generic
 from django.shortcuts import redirect
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.http.response import HttpResponse
+import json
+from NeoCoffee.models import Category
+from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -29,7 +33,7 @@ def sign_up(request):
         member_number = request.POST['number']
 
         if form.is_valid():
-            _member = member(member_name=member_name, 
+            _member = Member(member_name=member_name, 
                              member_email=member_email,
                              member_address=member_address,
                              member_number=member_number,)
@@ -67,4 +71,21 @@ def log_out(request):
     return render(request, 'accounts/logout.html')
 
 
+def place_order(request):
+    data = json.loads(request.body)
+    category_id = data.get('category_id')
 
+    # Fetch the corresponding member and category name.
+    try:
+        member_obj = Member.objects.get(member_name=request.user.username)
+        category_name = Category.objects.get(id=category_id).name
+
+        # Create a new order.
+        Order.objects.create(member=member_obj, coffee_name=category_name)
+
+        return JsonResponse({'success': True})
+
+    except Member.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Member not found'})
+    except Category.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Category not found'})

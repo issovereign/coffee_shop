@@ -75,9 +75,42 @@ document.getElementById("goBack").addEventListener("click", function() {
     }
 });
 
-function showPurchaseModal(categoryId) {
-    // Show purchase modal and on confirmation send data to the backend
+function getCookie(name) {
+    let value = "; " + document.cookie;
+    let parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
 }
+
+let csrftoken = getCookie('csrftoken');
+
+function showPurchaseModal(categoryId) {
+    // Here, you can use any method to show a modal, e.g., using Bootstrap's modal component.
+    // For simplicity, I'll use a confirm box.
+    let confirmation = confirm("確定購買這個商品嗎？");
+    if (confirmation) {
+        // Make an AJAX call to place the order.
+        fetch('/api/place_order/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                user_id: CURRENT_USER_ID,
+                category_id: categoryId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("購買成功！");
+            } else {
+                alert("購買失敗，請稍後再試。");
+            }
+        });
+    }
+}
+
 
 // Load the top-level categories on page load
 loadSubCategories(null, document.getElementById("categories"));
