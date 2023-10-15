@@ -5,6 +5,12 @@
     <h1>Coffee Shop</h1>
     <h3>登入</h3>
 
+    {% if error_message %}
+        <div class="alert alert-danger">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
     <form action="" method="POST" class="mt-3">
         {% csrf_token %}
         <div class="form-group">

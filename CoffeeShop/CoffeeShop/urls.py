@@ -29,5 +29,6 @@ urlpatterns = [
     path('api/subcategories/<int:parent_id>/', neo_views.sub_categories, name='sub_categories'),
     path('Shopping/', include('Shopping.urls')),
     path('api/place_order/', shp_views.place_order, name='place_order'),
+    path('orders/', shp_views.order_list, name='order_list'),
 ]
 

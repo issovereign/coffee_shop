@@ -11,8 +11,10 @@
     </div>
     <div class="mt-3">
         <button id="goBack" class="btn btn-secondary">返回上一層</button>
+        <a href="{% url 'order_list' %}" class="btn btn-info">View All Orders</a>
     </div>
 </div>
+
 
 <script>
 let navigationStack = [];
@@ -86,7 +88,7 @@ let csrftoken = getCookie('csrftoken');
 function showPurchaseModal(categoryId) {
     // Here, you can use any method to show a modal, e.g., using Bootstrap's modal component.
     // For simplicity, I'll use a confirm box.
-    let confirmation = confirm("確定購買這個商品嗎？");
+    let confirmation = confirm("確定購買1份這個商品嗎？");
     if (confirmation) {
         // Make an AJAX call to place the order.
         fetch('/api/place_order/', {
@@ -104,13 +106,27 @@ function showPurchaseModal(categoryId) {
         .then(data => {
             if (data.success) {
                 alert("購買成功！");
+                window.location.href = '/categories/';  // Redirect to categories page
             } else {
-                alert("購買失敗，請稍後再試。");
+                let loginConfirmation = confirm("購買失敗，請先登入。要幫您跳轉到登入頁面嗎？");
+                if (loginConfirmation) {
+                    window.location.href = loginUrl;  // Redirect to login page
+                } else {
+                    window.location.href = '/categories/';  // Redirect to categories page
+                }
             }
         });
+    } else {
+        if (navigationStack.length > 1) {
+            navigationStack.pop();
+            let lastVisited = navigationStack.pop();
+            loadSubCategories(lastVisited, document.getElementById("categories"));
+        } else if (navigationStack.length === 1) {
+            navigationStack.pop();
+            loadSubCategories(null, document.getElementById("categories"));
+        }
     }
 }
-
 
 // Load the top-level categories on page load
 loadSubCategories(null, document.getElementById("categories"));

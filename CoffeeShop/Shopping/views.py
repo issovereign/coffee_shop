@@ -49,6 +49,7 @@ def sign_up(request):
 
 def sign_in(request):
     form = LoginForm()
+    error_message = None
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -58,12 +59,16 @@ def sign_in(request):
         if user is not None:
             login(request, user)
             return redirect('/')  #重新導向到首頁
-                
+        else:
+            error_message = "帳號不存在或密碼錯誤"
+
     context = {
-        'form' : form
+        'form' : form,
+        'error_message': error_message
     }
 
     return render(request, 'accounts/login.html', context)
+
 
 def log_out(request):
     logout(request)
@@ -89,3 +94,7 @@ def place_order(request):
         return JsonResponse({'success': False, 'error': 'Member not found'})
     except Category.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Category not found'})
+    
+def order_list(request):
+    orders = Order.objects.all()
+    return render(request, 'orders/order_list.html', {'orders': orders})

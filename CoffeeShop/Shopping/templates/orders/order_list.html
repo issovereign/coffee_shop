@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1>All Orders</h1>
+    <table class="table table-bordered table-striped mt-4">
+      <thead>
+        <tr>
+          <th>帳號名稱</th>
+          <th>咖啡品種</th>
+          <th>數量</th> <!-- 新增的欄位 -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td>{{ order.member.member_name }}</td>
+            <td>{{ order.coffee_name }}</td>
+            <td>1份</td> <!-- 這裡是預設的1份 -->
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
