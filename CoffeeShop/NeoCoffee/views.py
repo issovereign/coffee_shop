@@ -30,9 +30,8 @@ def top_categories(request):
     # Serialize the categories
     data = [{"id": cat.id, "name": cat.name} for cat in top_cats]
 
-    print("shit")
-    for d in data:
-        print(d)
+    # for d in data:
+    #     print(d)
 
     return JsonResponse(data, safe=False)
 

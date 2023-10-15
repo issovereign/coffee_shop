@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="categories">
-    <!-- The top-level categories will be rendered here -->
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1>萬有咖啡館</h1>
+        <p>請於登入後，盡情選購咖啡!</p>
+    </div>
+    <div id="categories" class="row">
+        <!-- The categories will be rendered here in card format -->
+    </div>
+    <div class="mt-3">
+        <button id="goBack" class="btn btn-secondary">返回上一層</button>
+    </div>
 </div>
-
-<button id="goBack">返回上一層</button>
 
 <script>
 let navigationStack = [];
@@ -28,17 +35,29 @@ function loadSubCategories(parentId, element, apiUrlOverride) {
                 // This is the bottom category
                 showPurchaseModal(parentId);
             } else {
-                // Render the categories
+                // Render the categories using Bootstrap cards
                 data.forEach(category => {
                     let categoryDiv = document.createElement("div");
+                    categoryDiv.className = "col-md-4 mb-3";
+
+                    let cardDiv = document.createElement("div");
+                    cardDiv.className = "card";
+
+                    let cardBodyDiv = document.createElement("div");
+                    cardBodyDiv.className = "card-body d-flex align-items-center justify-content-center"; // Added classes for vertical and horizontal centering
+
                     let categoryLink = document.createElement("a");
                     categoryLink.href = "#";
+                    categoryLink.className = "card-title stretched-link"; // Use stretched-link to make the whole card clickable
                     categoryLink.innerText = category.name;
                     categoryLink.onclick = (e) => {
                         e.preventDefault();
                         loadSubCategories(category.id, element);
                     };
-                    categoryDiv.appendChild(categoryLink);
+
+                    cardBodyDiv.appendChild(categoryLink);
+                    cardDiv.appendChild(cardBodyDiv);
+                    categoryDiv.appendChild(cardDiv);
                     element.appendChild(categoryDiv);
                 });
             }
@@ -47,11 +66,11 @@ function loadSubCategories(parentId, element, apiUrlOverride) {
 
 document.getElementById("goBack").addEventListener("click", function() {
     if (navigationStack.length > 1) {
-        navigationStack.pop(); // Remove the current parentId
-        let lastVisited = navigationStack.pop(); // Get the previous parentId
+        navigationStack.pop();
+        let lastVisited = navigationStack.pop();
         loadSubCategories(lastVisited, document.getElementById("categories"));
     } else if (navigationStack.length === 1) {
-        navigationStack.pop(); // Clear the only item in the stack
+        navigationStack.pop();
         loadSubCategories(null, document.getElementById("categories"));
     }
 });

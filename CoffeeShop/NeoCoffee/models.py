@@ -29,11 +29,11 @@ def import_data_from_json(json_data):
         child.parent = parent
         child.save()
 
-    for k, v in node_mapping.items():
-        if v.parent:
-            parent_name = v.parent.name
-        else:
-            print(k, v.name, "TOP")
+    # for k, v in node_mapping.items():
+    #     if v.parent:
+    #         parent_name = v.parent.name
+    #     else:
+    #         print(k, v.name, "TOP")
 
 def initialize_data():
     with open("neo4j_importer_model.json", "r", encoding="utf-8") as file:
