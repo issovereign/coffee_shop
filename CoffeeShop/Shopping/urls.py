@@ -6,6 +6,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
+
+app_name = 'Shopping'
+
 urlpatterns = [
     path('', RedirectView.as_view(url='/Shopping/login'), name="index"),
     path('register', views.sign_up, name='Register'),

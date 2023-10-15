@@ -9,16 +9,16 @@ from django.http import JsonResponse
 from .models import Category
 
 
-class CategoryListView(generics.ListAPIView):
-    queryset = Category.objects.filter(parent=None)  # Only top-level categories
-    serializer_class = CategorySerializer
+# class CategoryListView(generics.ListAPIView):
+#     queryset = Category.objects.filter(parent=None)  # Only top-level categories
+#     serializer_class = CategorySerializer
 
-class SubCategoryListView(generics.ListAPIView):
-    serializer_class = CategorySerializer
+# class SubCategoryListView(generics.ListAPIView):
+#     serializer_class = CategorySerializer
 
-    def get_queryset(self):
-        parent_id = self.kwargs['parent_id']
-        return Category.objects.filter(parent_id=parent_id)
+#     def get_queryset(self):
+#         parent_id = self.kwargs['parent_id']
+#         return Category.objects.filter(parent_id=parent_id)
     
 def show_categories(request):
     return render(request, "categories.html")

@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'CoffeeShop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',  #PostgreSQL
-        'NAME': 'MEMBER',  #資料庫名稱
+        'NAME': 'COFFEE_SHOP',  #資料庫名稱
         'USER': 'postgres',  #資料庫帳號
         'PASSWORD': '123456',  #資料庫密碼
         'HOST': 'localhost',  #Server(伺服器)位址

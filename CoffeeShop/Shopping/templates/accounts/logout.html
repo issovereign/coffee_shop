@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="jumbotron mt-3">
-    <h1>Coffee Shop HomePage</h1>
-    <p class="lead">Log out.</p>
-    <a class="btn btn-lg btn-primary" href="{% url 'Login' %}" role="button">登出 &#187;</a>
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Coffee Shop HomePage</h1>
+        <p class="lead">Log out.</p>
+        <hr class="my-4">
+        <a class="btn btn-primary btn-lg" href="{% url 'Shopping:Login' %}" role="button">登入</a>
+    </div>
 </div>
-
 {% endblock  %}
