@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="categories">
+    <!-- The top-level categories will be rendered here -->
+</div>
+
+<script>
+function loadSubCategories(parentId, element, apiUrlOverride) {
+    // Determine the correct API endpoint based on parentId or use the provided override
+    let apiUrl = apiUrlOverride || (parentId ? `/api/subcategories/${parentId}/` : `/api/topcategories/`);
+    
+    // Use AJAX to fetch categories
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            // Render the categories
+            let categoriesDiv = document.createElement("div");
+            data.forEach(category => {
+                let categoryDiv = document.createElement("div");
+                let categoryLink = document.createElement("a");
+                categoryLink.href = "#";
+                categoryLink.innerText = category.name;
+                categoryLink.onclick = (e) => {
+                    e.preventDefault();
+                    categoriesDiv.innerHTML = ""; // Clear previous subcategories
+                    loadSubCategories(category.id, categoriesDiv);
+                };
+                categoryDiv.appendChild(categoryLink);
+                categoriesDiv.appendChild(categoryDiv);
+            });
+            element.appendChild(categoriesDiv);
+        });
+}
+
+// Load the top-level categories on page load
+loadSubCategories(null, document.getElementById("categories"));
+
+</script>
+{% endblock %}
